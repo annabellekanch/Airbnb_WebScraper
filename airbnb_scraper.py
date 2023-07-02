@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
+#initializing variables to hold a list of contents
 Names = []
 Prices = []
 Reviews = []
@@ -11,16 +12,17 @@ r = requests.get(url)
 
 soup = BeautifulSoup(r.text, "lxml")
 
+#since we start on the first page of Airbnb, we only have to loop through 14 pages
 for i in range(1, 14):
     np = soup.find("a", class_ = 'l1ovpqvx c1ytbx3a dir dir-ltr').get("href")
     cnp = "https://www.airbnb.com/"+np
 
     url = cnp
     r = requests.get(url)
-
-
+    
     soup = BeautifulSoup(r.text, "lxml")
 
+    #adding content to the lists initialized before based on their class name
     name = soup.find_all("div", class_ = "t1jojoys dir dir-ltr")
     for i in name:
         n = i.text
@@ -36,9 +38,11 @@ for i in range(1, 14):
         n = i.text 
         Reviews.append(n)
         
-
+#since not ever airbnb rental had reviews(if they are new) we have to transpose the data frame to ensure all columns can be combined
+#just so we don't recieve an error because all the columns are different lenghts
 a = {'Names' : Names, 'Prices/night' : Prices, "Reviews" : Reviews}
 df = pd.DataFrame.from_dict(a, orient = 'index')
 df = df.transpose()
+#converting dataframe to a csv file
 df.to_csv("airbnb_newyork.csv")
 
