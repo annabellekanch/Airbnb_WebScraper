@@ -38,8 +38,8 @@ for i in range(1, 14):
         n = i.text 
         Reviews.append(n)
         
-#since not ever airbnb rental had reviews(if they are new) we have to transpose the data frame to ensure all columns can be combined
-#just so we don't recieve an error because all the columns are different lenghts
+#not every airbnb rental had reviews(because they are new) so we set orient to index so the keys of the passed dict "a" can be rows and then we transpose 
+#the data frame this is just so we don't recieve an error because all the columns are different lengths
 a = {'Names' : Names, 'Prices/night' : Prices, "Reviews" : Reviews}
 df = pd.DataFrame.from_dict(a, orient = 'index')
 df = df.transpose()
